@@ -10,7 +10,7 @@ It's even shorter than `cd` (well, why not?).
 
 ### Fully operational mode
 
-* copy `d.sh` to a whichever directory yor like;
+* copy `d.sh` to whichever directory you like;
 * run `source d.sh` to enable `d` for the current shell (can be disabled with `unset d`);
 * or, for permanent use, add `source d.sh` to your `~/.bashrc` (or whatever configuration file Bash picks up on your system).
 
