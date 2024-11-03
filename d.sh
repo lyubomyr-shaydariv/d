@@ -146,7 +146,17 @@ EOF
 			echo "$D_NAME: no args accepted" >&2
 			return 1
 		fi
-		"${EDITOR:-${VISUAL:-ed}}" "$D_FAV_DIRS_FILE"
+		# TODO what is the best way to resolve the default editor?
+		if [[ -v VISUAL && -n "$VISUAL" ]]; then
+			local -r EDITOR="$VISUAL"
+		elif [[ -v EDITOR && -n "$EDITOR" ]]; then
+			:
+		elif IFS= read -r EDITOR < <(which editor) && [[ -v EDITOR && -n "$EDITOR" ]]; then
+			:
+		else
+			EDITOR='ed'
+		fi
+		"${EDITOR}" "$D_FAV_DIRS_FILE"
 		local -r TMP="$(mktemp)"
 		cp "$D_FAV_DIRS_FILE" "$TMP"
 		sed '/^$/d' < "$TMP" | sort | uniq > "$D_FAV_DIRS_FILE"
