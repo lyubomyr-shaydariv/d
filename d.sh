@@ -186,6 +186,7 @@ EOF
 		local -r TMP="$(mktemp)"
 		local DIR
 		while read -r DIR; do
+			DIR="$(readlink -f -- "$DIR")"
 			if [[ -d "$DIR" ]]; then
 				printf '%s\n' "$DIR"
 			else
