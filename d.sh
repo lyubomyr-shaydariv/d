@@ -17,7 +17,11 @@ d() {
 		local -ri D_PARENTS=1
 	fi
 
-	function __d_help() {
+	____d_normalize() {
+		sed '/^$/d' | sort | uniq
+	}
+
+	__d_help() {
 		if [[ $# -gt 0 ]]; then
 			echo "$0: no args accepted" >&2
 			return 1
@@ -86,7 +90,7 @@ EOF
 		done >> "$D_FAV_DIRS_FILE"
 		local -r TMP="$(mktemp)"
 		cp "$D_FAV_DIRS_FILE" "$TMP"
-		sed '/^$/d' < "$TMP" | sort | uniq > "$D_FAV_DIRS_FILE"
+		____d_normalize < "$TMP" > "$D_FAV_DIRS_FILE"
 		rm -f "$TMP"
 	}
 
@@ -105,6 +109,7 @@ EOF
 		fi
 		local DIR
 		if [[ $PARENTS -eq 0 ]]; then
+# TODO apply the normalize function
 			DIR="$(sort < "$D_FAV_DIRS_FILE" | uniq | "${D_SELECT_ONE[@]}")"
 		else
 			DIR="$(
@@ -114,6 +119,7 @@ EOF
 						printf '%s\n' "$DIR"
 						DIR="${DIR%/*}"
 					done
+# TODO apply the normalize function
 				done < $D_FAV_DIRS_FILE | sort | uniq | "${D_SELECT_ONE[@]}"
 			)"
 		fi
@@ -134,11 +140,12 @@ EOF
 	}
 
 	__d_config() {
-		printf 'D_CONFIG_DIR=%q\n' "$D_CONFIG_DIR"
-		printf 'D_FAV_DIRS_FILE=%q\n' "$D_FAV_DIRS_FILE"
-		printf 'D_PARENTS=%q\n' "${D_PARENTS}"
-		printf 'D_SELECT_MANY=%q\n' "${D_SELECT_MANY[*]}"
-		printf 'D_SELECT_ONE=%q\n' "${D_SELECT_ONE[*]}"
+		printf '%s=%q\n' \
+			'D_CONFIG_DIR' "$D_CONFIG_DIR" \
+			'D_FAV_DIRS_FILE' "$D_FAV_DIRS_FILE" \
+			'D_PARENTS' "${D_PARENTS}" \
+			'D_SELECT_MANY' "${D_SELECT_MANY[*]}" \
+			'D_SELECT_ONE' "${D_SELECT_ONE[*]}"
 	}
 
 	__d_edit() {
@@ -159,7 +166,7 @@ EOF
 		"${EDITOR}" "$D_FAV_DIRS_FILE"
 		local -r TMP="$(mktemp)"
 		cp "$D_FAV_DIRS_FILE" "$TMP"
-		sed '/^$/d' < "$TMP" | sort | uniq > "$D_FAV_DIRS_FILE"
+		____d_normalize < "$TMP" > "$D_FAV_DIRS_FILE"
 		rm -f "$TMP"
 	}
 
@@ -185,7 +192,7 @@ EOF
 				echo "prune $DIR" >&2
 			fi
 		done < "$D_FAV_DIRS_FILE" > "$TMP"
-		sed '/^$/d' < "$TMP" | sort | uniq > "$D_FAV_DIRS_FILE"
+		____d_normalize < "$TMP" > "$D_FAV_DIRS_FILE"
 		rm -f "$TMP"
 	}
 
@@ -213,7 +220,7 @@ EOF
 			fi
 			printf '%s\n' "$DIR"
 		done < "$D_FAV_DIRS_FILE" > "$TMP"
-		sed '/^$/d' < "$TMP" | sort | uniq > "$D_FAV_DIRS_FILE"
+		____d_normalize < "$TMP" > "$D_FAV_DIRS_FILE"
 		rm -f "$TMP"
 	}
 
