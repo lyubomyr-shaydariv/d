@@ -205,6 +205,7 @@ EOF
 			done < <("${D_SELECT_MANY[@]}" < "$D_FAV_DIRS_FILE")
 		else
 			for DIR; do
+				DIR="$(readlink -f -- "$DIR")"
 				RM_INDEX_FILE["$DIR"]=1
 			done
 		fi
