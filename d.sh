@@ -2,7 +2,7 @@
 
 d() {
 
-	local -r D_NAME="${D_NAME:-${FUNCNAME}}"
+	local -r D_NAME="${D_NAME:-${FUNCNAME[0]}}"
 	local -r D_CONFIG_DIR="${D_CONFIG_DIR:-$HOME}"
 	local -r D_FAV_DIRS_FILE="${D_FAV_DIRS_FILE:-$D_CONFIG_DIR/.d}"
 	if [[ ! -v D_SELECT_ONE ]]; then
@@ -120,7 +120,7 @@ EOF
 						DIR="${DIR%/*}"
 					done
 # TODO apply the normalize function
-				done < $D_FAV_DIRS_FILE | sort | uniq | "${D_SELECT_ONE[@]}"
+				done < "$D_FAV_DIRS_FILE" | sort | uniq | "${D_SELECT_ONE[@]}"
 			)"
 		fi
 		cd "$DIR"
@@ -136,7 +136,7 @@ EOF
 			echo "$D_NAME: must be confirmed with the -f (--force) switch" >&2
 			return 1
 		fi
-		> "$D_FAV_DIRS_FILE"
+		: > "$D_FAV_DIRS_FILE"
 	}
 
 	__d_config() {
@@ -246,5 +246,5 @@ EOF
 
 if ! (return 2> /dev/null); then
 	set -TEeuo pipefail
-	__D_EXECUTED= D_NAME="$0" d "$@"
+	__D_EXECUTED='' D_NAME="$0" d "$@"
 fi
