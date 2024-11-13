@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -TEeuo pipefail
+
+shellcheck --shell='bash' --norc --exclude='SC1091,SC2155' d.sh
