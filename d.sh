@@ -95,6 +95,9 @@ EOF
 	}
 
 	__d_cd() {
+		if [[ -v __D_EXECUTED ]]; then
+			echo "$0: warn: the cd command may have no effect if started in limited (script) mode" >&2
+		fi
 		local -i PARENTS=0
 		if [[ $# -gt 0 ]] && [[ "$1" == '-p' || "$1" == '--parents' ]]; then
 			PARENTS=1
