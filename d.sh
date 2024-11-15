@@ -112,7 +112,6 @@ EOF
 		fi
 		local DIR
 		if [[ $PARENTS -eq 0 ]]; then
-# TODO apply the normalize function
 			DIR="$(sort < "$D_FAV_DIRS_FILE" | uniq | "${D_SELECT_ONE[@]}")"
 		else
 			DIR="$(
@@ -123,7 +122,6 @@ EOF
 							printf '%s\n' "$DIR"
 							DIR="${DIR%/*}"
 						done
-# TODO apply the normalize function
 					done
 				 } < "$D_FAV_DIRS_FILE" | sort | uniq | "${D_SELECT_ONE[@]}"
 			)"
