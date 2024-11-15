@@ -116,14 +116,16 @@ EOF
 			DIR="$(sort < "$D_FAV_DIRS_FILE" | uniq | "${D_SELECT_ONE[@]}")"
 		else
 			DIR="$(
-				printf '%s\n' '/'
-				while read -r DIR; do
-					while [[ -n "$DIR" ]]; do
-						printf '%s\n' "$DIR"
-						DIR="${DIR%/*}"
-					done
+				{
+					printf '%s\n' '/'
+					while read -r DIR; do
+						while [[ -n "$DIR" ]]; do
+							printf '%s\n' "$DIR"
+							DIR="${DIR%/*}"
+						done
 # TODO apply the normalize function
-				done < "$D_FAV_DIRS_FILE" | sort | uniq | "${D_SELECT_ONE[@]}"
+					done
+				 } < "$D_FAV_DIRS_FILE" | sort | uniq | "${D_SELECT_ONE[@]}"
 			)"
 		fi
 		cd "$DIR"
