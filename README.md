@@ -64,3 +64,9 @@ d.sh [<COMMAND> [OPT...] [ARG...]]
 
 Note that array variables, when `export`ed, cannot be _fully_ passed to `d.sh` if it's executed as a child process.
 his limitation makes `D_SELECT_MANY` and `D_SELECT_ONE` work only as single value variables (effectively, these can only target to a filter program without options being passed).
+
+## Known limitations
+
+### File system
+
+* Currently `d` always resolves symlinks. As a workaround you can add a symlink to the `.d` file using `d edit`. Note that `d prune` _may_ prune the symlink from the list (for example, the symbolic link is relative and the current directory does not have the symlink).
