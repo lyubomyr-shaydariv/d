@@ -23,7 +23,7 @@ d() {
 
 	__d_help() {
 		if [[ $# -gt 0 ]]; then
-			echo "$0: no args accepted" >&2
+			echo "$0: error: no args accepted" >&2
 			return 1
 		fi
 		cat << EOF
@@ -93,9 +93,9 @@ EOF
 		for DIR; do
 			if [[ FORCE -eq 0 && ! -d "$DIR" ]]; then
 				if [[ ! -e "$DIR" ]]; then
-					echo "$D_NAME: $DIR does not exist" >&2
+					echo "$D_NAME: error: $DIR does not exist" >&2
 				else
-					echo "$D_NAME: $DIR is not a directory" >&2
+					echo "$D_NAME: error: $DIR is not a directory" >&2
 				fi
 				return 1
 			fi
@@ -119,7 +119,7 @@ EOF
 			shift
 		fi
 		if [[ $# -gt 0 ]]; then
-			echo "$D_NAME: no args accepted" >&2
+			echo "$D_NAME: error: no args accepted" >&2
 			return 1
 		fi
 		if [[ D_PARENTS -ne 0 ]]; then
@@ -149,7 +149,7 @@ EOF
 
 	__d_clear() {
 		if [[ $# -ne 1 ]] || [[ "$1" != '-f' && "$1" != '--force' ]]; then
-			echo "$D_NAME: must be confirmed with the -f (--force) switch" >&2
+			echo "$D_NAME: error: must be confirmed with the -f (--force) switch" >&2
 			return 1
 		fi
 		: > "$D_FAV_DIRS_FILE"
@@ -166,7 +166,7 @@ EOF
 
 	__d_edit() {
 		if [[ $# -gt 0 ]]; then
-			echo "$D_NAME: no args accepted" >&2
+			echo "$D_NAME: error: no args accepted" >&2
 			return 1
 		fi
 		# TODO what is the best way to resolve the default editor?
@@ -188,7 +188,7 @@ EOF
 
 	__d_ls() {
 		if [[ $# -gt 0 ]]; then
-			echo "$D_NAME: no args accepted" >&2
+			echo "$D_NAME: error: no args accepted" >&2
 			return 1
 		fi
 		cat "$D_FAV_DIRS_FILE"
@@ -196,7 +196,7 @@ EOF
 
 	__d_prune() {
 		if [[ $# -gt 0 ]]; then
-			echo "$D_NAME: no args accepted" >&2
+			echo "$D_NAME: error: no args accepted" >&2
 			return 1
 		fi
 		local -r TMP="$(mktemp)"
@@ -259,7 +259,7 @@ EOF
 		__d_"$COMMAND" "$@"
 		;;
 	*)
-		echo "$D_NAME: unrecognized command: $COMMAND" >&2
+		echo "$D_NAME: error: unrecognized command: $COMMAND" >&2
 		return 1
 		;;
 	esac
