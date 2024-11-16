@@ -133,9 +133,7 @@ EOF
 	}
 
 	__d_clear() {
-		if [[ $# -eq 1 ]] && [[ "$1" == '-f' || "$1" == '--force' ]]; then
-			shift
-		else
+		if [[ $# -ne 1 ]] || [[ "$1" != '-f' && "$1" != '--force' ]]; then
 			echo "$D_NAME: must be confirmed with the -f (--force) switch" >&2
 			return 1
 		fi
@@ -146,7 +144,7 @@ EOF
 		printf '%s=%q\n' \
 			'D_CONFIG_DIR' "$D_CONFIG_DIR" \
 			'D_FAV_DIRS_FILE' "$D_FAV_DIRS_FILE" \
-			'D_PARENTS' "${D_PARENTS}" \
+			'D_PARENTS' "$D_PARENTS" \
 			'D_SELECT_MANY' "${D_SELECT_MANY[*]}" \
 			'D_SELECT_ONE' "${D_SELECT_ONE[*]}"
 	}
