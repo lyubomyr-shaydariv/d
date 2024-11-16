@@ -30,7 +30,7 @@ d() {
 $D_NAME - fav dirs
 
 syntax:
-	$D_NAME [<COMMAND> [OPT...] [ARG...]]
+	$D_NAME [<COMMAND> [OPT...] [--] [ARG...]]
 
 commands:
 	add [-f|--force] [dir...]
@@ -71,10 +71,21 @@ EOF
 
 	__d_add() {
 		local -i FORCE=0
-		if [[ $# -gt 0 ]] && [[ "$1" == '-f' || "$1" == '--force' ]]; then
-			FORCE=1
+		while [[ $# -gt 0 ]]; do
+			case "$1" in
+			'-f'|'--force')
+				FORCE=1
+				;;
+			'--')
+				shift
+				break
+				;;
+			*)
+				break
+				;;
+			esac
 			shift
-		fi
+		done
 		if [[ $# -eq 0 ]]; then
 			set -- "$(pwd)"
 		fi

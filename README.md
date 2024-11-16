@@ -27,7 +27,7 @@ Verify the installation with `type -t d.sh`: the expected output is `file`.
 ### Syntax
 
 ```
-d [<COMMAND> [OPT...] [ARG...]]
+d [<COMMAND> [OPT...] [--] [ARG...]]
 ```
 
 or
@@ -40,7 +40,7 @@ d.sh [<COMMAND> [OPT...] [ARG...]]
 
 | Command | Descripton |
 | --- | --- |
-| `add [-f\|--force] [dir...]` | add `pwd` or directories to the fav dirs file |
+| `add [-f\|--force] [--] [dir...]` | add `pwd` or directories to the fav dirs file |
 | `clear [-f\|--force]` | clear the fav dirs file |
 | `config` | show effective configuration |
 | `cd [-p\|--parents]` | change current directory (default)<br/>has no `cd` effect if d is executed as a script (not `source`d) |
