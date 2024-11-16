@@ -81,7 +81,11 @@ EOF
 		local DIR
 		for DIR; do
 			if [[ FORCE -eq 0 && ! -d "$DIR" ]]; then
-				echo "$D_NAME: $DIR does not exist" >&2
+				if [[ ! -e "$DIR" ]]; then
+					echo "$D_NAME: $DIR does not exist" >&2
+				else
+					echo "$D_NAME: $DIR is not a directory" >&2
+				fi
 				return 1
 			fi
 			DIR="$(readlink -f -- "$DIR")"
@@ -185,14 +189,19 @@ EOF
 			return 1
 		fi
 		local -r TMP="$(mktemp)"
+		local ORIG_DIR
 		local DIR
-		while read -r DIR; do
-			DIR="$(readlink -f -- "$DIR")"
-			if [[ -d "$DIR" ]]; then
-				printf '%s\n' "$DIR"
-			else
-				echo "prune $DIR" >&2
+		while read -r ORIG_DIR; do
+			DIR="$(readlink -f -- "$ORIG_DIR")"
+			if [[ ! -e "$DIR" ]]; then
+				echo "prune $ORIG_DIR" >&2
+				continue
 			fi
+			if [[ ! -d "$DIR" ]]; then
+				echo "prune $ORIG_DIR" >&2 # TODO consider indicating a removal for a non-directory
+				continue
+			fi
+			printf '%s\n' "$DIR"
 		done < "$D_FAV_DIRS_FILE" > "$TMP"
 		____d_normalize < "$TMP" > "$D_FAV_DIRS_FILE"
 		rm -f "$TMP"
