@@ -205,12 +205,12 @@ EOF
 		declare DIR
 		while read -r ORIG_DIR; do
 			DIR="$(readlink -f -- "$ORIG_DIR")"
-			if [[ ! -e "$DIR" ]]; then
-				echo "prune $ORIG_DIR" >&2
-				continue
-			fi
-			if [[ ! -d "$DIR" ]]; then
-				echo "prune $ORIG_DIR" >&2 # TODO consider indicating a removal for a non-directory
+			if [[ ! -d  "$DIR" ]]; then
+				if [[ -e "$DIR" ]]; then
+					echo "prune $ORIG_DIR (not a directory)" >&2
+				else
+					echo "prune $ORIG_DIR" >&2
+				fi
 				continue
 			fi
 			printf '%s\n' "$DIR"
