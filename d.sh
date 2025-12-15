@@ -178,7 +178,7 @@ EOF
 		elif [[ -e '/usr/bin/editor' ]]; then
 			declare -r EDITOR='/usr/bin/editor'
 		else
-			EDITOR='ed'
+			declare -r EDITOR='ed'
 		fi
 		"${EDITOR}" "$D_FAV_DIRS_FILE"
 		declare -r TMP="$(mktemp)"
