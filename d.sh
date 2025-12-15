@@ -169,13 +169,14 @@ EOF
 			echo "$D_NAME: error: no args accepted" >&2
 			return 1
 		fi
-		# TODO what is the best way to resolve the default editor?
 		if [[ -v VISUAL && -n "$VISUAL" ]]; then
 			declare -r EDITOR="$VISUAL"
 		elif [[ -v EDITOR && -n "$EDITOR" ]]; then
 			:
 		elif IFS= read -r EDITOR < <(which editor) && [[ -v EDITOR && -n "$EDITOR" ]]; then
 			:
+		elif [[ -e '/usr/bin/editor' ]]; then
+			declare -r EDITOR='/usr/bin/editor'
 		else
 			EDITOR='ed'
 		fi
