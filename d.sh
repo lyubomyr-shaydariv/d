@@ -2,19 +2,19 @@
 
 d() {
 
-	local -r D_NAME="${D_NAME:-${FUNCNAME[0]}}"
-	local -r D_CONFIG_DIR="${D_CONFIG_DIR:-$HOME}"
-	local -r D_FAV_DIRS_FILE="${D_FAV_DIRS_FILE:-$D_CONFIG_DIR/.d}"
+	declare -r D_NAME="${D_NAME:-${FUNCNAME[0]}}"
+	declare -r D_CONFIG_DIR="${D_CONFIG_DIR:-$HOME}"
+	declare -r D_FAV_DIRS_FILE="${D_FAV_DIRS_FILE:-$D_CONFIG_DIR/.d}"
 	if [[ ! -v D_SELECT_ONE ]]; then
-		local -ra D_SELECT_ONE=('fzf' '--tac')
+		declare -ra D_SELECT_ONE=('fzf' '--tac')
 	fi
 	if [[ ! -v D_SELECT_MANY ]]; then
-		local -ra D_SELECT_MANY=('fzf' '--tac' '--multi')
+		declare -ra D_SELECT_MANY=('fzf' '--tac' '--multi')
 	fi
 	if [[ ! -v D_PARENTS ]]; then
-		local -ri D_PARENTS=0
+		declare -ri D_PARENTS=0
 	else
-		local -ri D_PARENTS=1
+		declare -ri D_PARENTS=1
 	fi
 
 	____d_normalize() {
@@ -70,7 +70,7 @@ EOF
 	}
 
 	__d_add() {
-		local -i FORCE=0
+		declare -i FORCE=0
 		while [[ $# -gt 0 ]]; do
 			case "$1" in
 			'-f'|'--force')
@@ -89,7 +89,7 @@ EOF
 		if [[ $# -eq 0 ]]; then
 			set -- "$(pwd)"
 		fi
-		local DIR
+		declare DIR
 		for DIR; do
 			if [[ FORCE -eq 0 && ! -d "$DIR" ]]; then
 				if [[ ! -e "$DIR" ]]; then
@@ -103,7 +103,7 @@ EOF
 			printf '%s\n' "$DIR"
 			echo "add $DIR" >&2
 		done >> "$D_FAV_DIRS_FILE"
-		local -r TMP="$(mktemp)"
+		declare -r TMP="$(mktemp)"
 		cp "$D_FAV_DIRS_FILE" "$TMP"
 		____d_normalize < "$TMP" > "$D_FAV_DIRS_FILE"
 		rm -f "$TMP"
@@ -113,7 +113,7 @@ EOF
 		if [[ -v __D_EXECUTED ]]; then
 			echo "$0: warn: the cd command may have no effect if started in limited (script) mode" >&2
 		fi
-		local -i PARENTS=0
+		declare -i PARENTS=0
 		if [[ $# -gt 0 ]] && [[ "$1" == '-p' || "$1" == '--parents' ]]; then
 			PARENTS=1
 			shift
@@ -125,7 +125,7 @@ EOF
 		if [[ D_PARENTS -ne 0 ]]; then
 			PARENTS=1
 		fi
-		local DIR
+		declare DIR
 		if [[ $PARENTS -eq 0 ]]; then
 			DIR="$(sort < "$D_FAV_DIRS_FILE" | uniq | "${D_SELECT_ONE[@]}")"
 		else
@@ -171,7 +171,7 @@ EOF
 		fi
 		# TODO what is the best way to resolve the default editor?
 		if [[ -v VISUAL && -n "$VISUAL" ]]; then
-			local -r EDITOR="$VISUAL"
+			declare -r EDITOR="$VISUAL"
 		elif [[ -v EDITOR && -n "$EDITOR" ]]; then
 			:
 		elif IFS= read -r EDITOR < <(which editor) && [[ -v EDITOR && -n "$EDITOR" ]]; then
@@ -180,7 +180,7 @@ EOF
 			EDITOR='ed'
 		fi
 		"${EDITOR}" "$D_FAV_DIRS_FILE"
-		local -r TMP="$(mktemp)"
+		declare -r TMP="$(mktemp)"
 		cp "$D_FAV_DIRS_FILE" "$TMP"
 		____d_normalize < "$TMP" > "$D_FAV_DIRS_FILE"
 		rm -f "$TMP"
@@ -199,9 +199,9 @@ EOF
 			echo "$D_NAME: error: no args accepted" >&2
 			return 1
 		fi
-		local -r TMP="$(mktemp)"
-		local ORIG_DIR
-		local DIR
+		declare -r TMP="$(mktemp)"
+		declare ORIG_DIR
+		declare DIR
 		while read -r ORIG_DIR; do
 			DIR="$(readlink -f -- "$ORIG_DIR")"
 			if [[ ! -e "$DIR" ]]; then
@@ -219,8 +219,8 @@ EOF
 	}
 
 	__d_rm() {
-		local -A RM_INDEX_FILE
-		local DIR
+		declare -A RM_INDEX_FILE
+		declare DIR
 		if [[ $# -eq 0 ]]; then
 			while IFS= read -r DIR; do
 				RM_INDEX_FILE["$DIR"]=1
@@ -234,7 +234,7 @@ EOF
 		if [[ ${#RM_INDEX_FILE[@]} == 0 ]]; then
 			return
 		fi
-		local -r TMP="$(mktemp)"
+		declare -r TMP="$(mktemp)"
 		while IFS= read -r DIR; do
 			if [[ -n "${RM_INDEX_FILE[$DIR]+TO_RM}" ]]; then
 				echo "rm $DIR" >&2
@@ -251,7 +251,7 @@ EOF
 		set -- 'cd'
 	fi
 
-	local -r COMMAND="${1?no command}"
+	declare -r COMMAND="${1?no command}"
 	shift
 
 	case "$COMMAND" in
