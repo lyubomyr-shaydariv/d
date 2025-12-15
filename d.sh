@@ -104,9 +104,8 @@ EOF
 			echo "add $DIR" >&2
 		done >> "$D_FAV_DIRS_FILE"
 		declare -r TMP="$(mktemp)"
-		cp "$D_FAV_DIRS_FILE" "$TMP"
-		____d_normalize < "$TMP" > "$D_FAV_DIRS_FILE"
-		rm -f "$TMP"
+		____d_normalize < "$D_FAV_DIRS_FILE" > "$TMP"
+		mv -f "$TMP" "$D_FAV_DIRS_FILE"
 	}
 
 	__d_cd() {
@@ -182,9 +181,8 @@ EOF
 		fi
 		"${EDITOR}" "$D_FAV_DIRS_FILE"
 		declare -r TMP="$(mktemp)"
-		cp "$D_FAV_DIRS_FILE" "$TMP"
-		____d_normalize < "$TMP" > "$D_FAV_DIRS_FILE"
-		rm -f "$TMP"
+		____d_normalize < "$D_FAV_DIRS_FILE" > "$TMP"
+		mv -f "$TMP" "$D_FAV_DIRS_FILE"
 	}
 
 	__d_ls() {
