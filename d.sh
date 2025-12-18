@@ -105,7 +105,8 @@ EOF
 		done >> "$D_FAV_DIRS_FILE"
 		declare -r TMP="$(mktemp)"
 		____d_normalize < "$D_FAV_DIRS_FILE" > "$TMP"
-		mv -f "$TMP" "$D_FAV_DIRS_FILE"
+		cat "$TMP" > "$D_FAV_DIRS_FILE"
+		rm -f "$TMP"
 	}
 
 	__d_cd() {
@@ -182,7 +183,8 @@ EOF
 		"${EDITOR}" "$D_FAV_DIRS_FILE"
 		declare -r TMP="$(mktemp)"
 		____d_normalize < "$D_FAV_DIRS_FILE" > "$TMP"
-		mv -f "$TMP" "$D_FAV_DIRS_FILE"
+		cat "$TMP" > "$D_FAV_DIRS_FILE"
+		rm -f "$TMP"
 	}
 
 	__d_ls() {
